@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "268330233483",
+    "project_id": "cafery-e001b",
+    "storage_bucket": "cafery-e001b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268330233483:android:15c65a4daf2e2a04ddae8e",
+        "android_client_info": {
+          "package_name": "com.example.cafery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVd3s8xsDJQ1YkWhwJh6VmBzU9AyLH7EY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
