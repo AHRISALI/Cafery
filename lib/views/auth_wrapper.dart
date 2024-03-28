@@ -1,10 +1,10 @@
-import 'package:cafery/views/home.dart';
-import 'package:cafery/views/login.dart';
+import 'package:cafery/views/home_screen.dart';
+import 'package:cafery/views/user_login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Auth extends StatelessWidget {
-  const Auth({super.key});
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +13,9 @@ class Auth extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Home();
+          return HomeScreen();
         } else {
-          return Login();
+          return UserLoginScreen();
         }
       },
     ));
