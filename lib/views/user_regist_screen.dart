@@ -1,7 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cafery/controllers/regist_controller.dart';
+import 'package:cafery/services/auth.dart';
+import 'package:cafery/views/home_screen.dart';
 import 'package:cafery/views/startup_screen.dart';
+import 'package:cafery/views/user_login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +17,32 @@ class UserRegistScreen extends StatefulWidget {
 }
 
 class _RegistState extends State<UserRegistScreen> {
+  final AuthService _auth = AuthService();
+
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _passwordCheckController = TextEditingController();
+  TextEditingController _prefController = TextEditingController();
+
+  Future<void> siginUp() async {
+    try {
+      await AuthService().createUserWithEmailAndPassword(
+          _emailController.text, _passwordController.text);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => UserLoginScreen()));
+    } on FirebaseAuthException catch (e) {}
+  }
+
+  @override
+  void dispose() {
+    _userNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordCheckController.dispose();
+    _prefController.dispose();
+  }
+
   bool _isSecurePass = true;
   bool _isSecurePassCheck = true;
   String selectedPrefecture = '北海道';
@@ -147,7 +177,7 @@ class _RegistState extends State<UserRegistScreen> {
                               Expanded(
                                 child: TextFormField(
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  controller: registController.userName,
+                                  controller: _userNameController,
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -191,7 +221,7 @@ class _RegistState extends State<UserRegistScreen> {
                               Expanded(
                                 child: TextFormField(
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  controller: registController.email,
+                                  controller: _emailController,
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -236,7 +266,7 @@ class _RegistState extends State<UserRegistScreen> {
                                 child: TextFormField(
                                   obscureText: _isSecurePass,
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  controller: registController.password,
+                                  controller: _passwordController,
                                   style: TextStyle(fontSize: 20),
                                   decoration: InputDecoration(
                                     suffixIcon: togglePass(),
@@ -285,7 +315,7 @@ class _RegistState extends State<UserRegistScreen> {
                                 child: TextFormField(
                                   obscureText: _isSecurePassCheck,
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  controller: registController.passwordCheck,
+                                  controller: _passwordCheckController,
                                   style: TextStyle(fontSize: 20),
                                   decoration: InputDecoration(
                                     suffixIcon: togglePassCheck(),
@@ -338,6 +368,7 @@ class _RegistState extends State<UserRegistScreen> {
                                   onChanged: (String? newValue) {
                                     setState(() {
                                       selectedPrefecture = newValue ?? '';
+                                      _prefController.text = selectedPrefecture;
                                     });
                                   },
                                   items: prefectures
@@ -359,7 +390,7 @@ class _RegistState extends State<UserRegistScreen> {
                   ],
                 ),
 
-                //ボタン
+                // //新規登録ボタン
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -369,11 +400,8 @@ class _RegistState extends State<UserRegistScreen> {
                       width: 150,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            RegistController.instance.registerUser(
-                                registController.email.text.trim(),
-                                registController.password.text.trim());
-                          }
+                          siginUp();
+                          //dispose();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(111, 78, 49, 1.0),
@@ -389,6 +417,7 @@ class _RegistState extends State<UserRegistScreen> {
                     )
                   ],
                 ),
+
                 Padding(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom))

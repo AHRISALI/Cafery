@@ -1,8 +1,13 @@
 import 'package:cafery/firebase_options.dart';
+import 'package:cafery/models/user.dart';
+import 'package:cafery/services/auth.dart';
+import 'package:cafery/views/auth_wrapper.dart';
 import 'package:cafery/views/startup_screen.dart';
+import 'package:cafery/views/user_login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,10 +25,8 @@ class MyApp extends StatelessWidget {
     ));
 
     return MaterialApp(
-        theme: ThemeData(
-            textTheme:
-                const TextTheme(bodyLarge: TextStyle(fontFamily: 'MeiryoUI'))),
-        debugShowCheckedModeBanner: false,
-        home: StartupScreen());
+      debugShowCheckedModeBanner: false,
+      home: const AuthWrapper(),
+    );
   }
 }

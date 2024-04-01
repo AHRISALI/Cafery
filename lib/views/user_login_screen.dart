@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cafery/services/auth.dart';
+import 'package:cafery/views/home_screen.dart';
 import 'package:cafery/views/startup_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserLoginScreen extends StatefulWidget {
@@ -12,6 +15,26 @@ class UserLoginScreen extends StatefulWidget {
 
 class _UserLoginScreenState extends State<UserLoginScreen> {
   bool _isSecurePass = true;
+  //final AuthService _auth = AuthService();
+  bool isLogin = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> siginIn() async {
+    try {
+      await AuthService().signInWithEmailAndPassword(
+          _emailController.text, _passwordController.text);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    } on FirebaseAuthException catch (e) {}
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +111,9 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                                 ),
                               ),
                               Expanded(
-                                child: TextFormField(
+                                child: TextField(
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  //controller: registController.email,
+                                  controller: _emailController,
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -132,10 +155,10 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                                 ),
                               ),
                               Expanded(
-                                child: TextFormField(
+                                child: TextField(
                                   obscureText: _isSecurePass,
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  //controller: registController.password,
+                                  controller: _passwordController,
                                   style: TextStyle(fontSize: 20),
                                   decoration: InputDecoration(
                                     suffixIcon: togglePass(),
@@ -187,7 +210,9 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                       height: 50,
                       width: 150,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          siginIn();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(111, 78, 49, 1.0),
                           shape: RoundedRectangleBorder(
