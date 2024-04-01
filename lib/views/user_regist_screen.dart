@@ -17,8 +17,6 @@ class UserRegistScreen extends StatefulWidget {
 }
 
 class _RegistState extends State<UserRegistScreen> {
-  final AuthService _auth = AuthService();
-
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -32,15 +30,6 @@ class _RegistState extends State<UserRegistScreen> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => UserLoginScreen()));
     } on FirebaseAuthException catch (e) {}
-  }
-
-  @override
-  void dispose() {
-    _userNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _passwordCheckController.dispose();
-    _prefController.dispose();
   }
 
   bool _isSecurePass = true;
@@ -401,7 +390,6 @@ class _RegistState extends State<UserRegistScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           siginUp();
-                          //dispose();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(111, 78, 49, 1.0),
