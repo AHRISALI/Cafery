@@ -35,25 +35,10 @@ class StartupScreen extends StatelessWidget {
                     padding: EdgeInsets.only(top: 10, left: 10),
                     height: 50,
                     child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                            );
-                          },
-                          child: Text(
-                            'スキップ',
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                decoration: TextDecoration.underline),
-                          ),
-                        )),
+                      alignment: Alignment.bottomRight,
+                    ),
                   ),
-                ),
+                )
               ],
             ),
             Column(

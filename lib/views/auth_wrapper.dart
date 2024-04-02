@@ -5,7 +5,6 @@ import 'package:cafery/views/home_screen.dart';
 import 'package:cafery/views/startup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
