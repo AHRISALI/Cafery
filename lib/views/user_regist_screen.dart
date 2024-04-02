@@ -1,18 +1,37 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cafery/controllers/regist_controller.dart';
-import 'package:cafery/views/startup.dart';
+import 'package:cafery/services/auth.dart';
+import 'package:cafery/views/home_screen.dart';
+import 'package:cafery/views/startup_screen.dart';
+import 'package:cafery/views/user_login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Regist extends StatefulWidget {
-  const Regist({Key? key}) : super(key: key);
+class UserRegistScreen extends StatefulWidget {
+  const UserRegistScreen({Key? key}) : super(key: key);
 
   @override
   _RegistState createState() => _RegistState();
 }
 
-class _RegistState extends State<Regist> {
+class _RegistState extends State<UserRegistScreen> {
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _passwordCheckController = TextEditingController();
+  TextEditingController _prefController = TextEditingController();
+
+  Future<void> siginUp() async {
+    try {
+      await AuthService().createUserWithEmailAndPassword(
+          _emailController.text, _passwordController.text);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => UserLoginScreen()));
+    } on FirebaseAuthException catch (e) {}
+  }
+
   bool _isSecurePass = true;
   bool _isSecurePassCheck = true;
   String selectedPrefecture = '北海道';
@@ -74,10 +93,10 @@ class _RegistState extends State<Regist> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Color.fromRGBO(255, 248, 231, 1.0),
-        body: SingleChildScrollView(
-          reverse: true,
-          child: Form(
-            key: _formKey,
+        body: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20.0),
+          child: SingleChildScrollView(
+            reverse: true,
             child: Column(
               children: [
                 Row(
@@ -90,7 +109,8 @@ class _RegistState extends State<Regist> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Startup()),
+                            MaterialPageRoute(
+                                builder: (context) => StartupScreen()),
                           );
                         },
                         child: Icon(Icons.arrow_back_rounded),
@@ -104,9 +124,9 @@ class _RegistState extends State<Regist> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 10),
-                      height: 200,
-                      width: 200,
+                      //margin: EdgeInsets.only(top: -10),
+                      height: 150,
+                      width: 150,
                       child: Image(
                           image: AssetImage('lib/icons/logo.png'),
                           fit: BoxFit.cover),
@@ -146,7 +166,7 @@ class _RegistState extends State<Regist> {
                               Expanded(
                                 child: TextFormField(
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  controller: registController.userName,
+                                  controller: _userNameController,
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -190,7 +210,7 @@ class _RegistState extends State<Regist> {
                               Expanded(
                                 child: TextFormField(
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  controller: registController.email,
+                                  controller: _emailController,
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -235,7 +255,7 @@ class _RegistState extends State<Regist> {
                                 child: TextFormField(
                                   obscureText: _isSecurePass,
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  controller: registController.password,
+                                  controller: _passwordController,
                                   style: TextStyle(fontSize: 20),
                                   decoration: InputDecoration(
                                     suffixIcon: togglePass(),
@@ -284,7 +304,7 @@ class _RegistState extends State<Regist> {
                                 child: TextFormField(
                                   obscureText: _isSecurePassCheck,
                                   textAlignVertical: TextAlignVertical.bottom,
-                                  controller: registController.passwordCheck,
+                                  controller: _passwordCheckController,
                                   style: TextStyle(fontSize: 20),
                                   decoration: InputDecoration(
                                     suffixIcon: togglePassCheck(),
@@ -337,6 +357,7 @@ class _RegistState extends State<Regist> {
                                   onChanged: (String? newValue) {
                                     setState(() {
                                       selectedPrefecture = newValue ?? '';
+                                      _prefController.text = selectedPrefecture;
                                     });
                                   },
                                   items: prefectures
@@ -358,7 +379,7 @@ class _RegistState extends State<Regist> {
                   ],
                 ),
 
-                //ボタン
+                // //新規登録ボタン
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -368,11 +389,7 @@ class _RegistState extends State<Regist> {
                       width: 150,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            RegistController.instance.registerUser(
-                                registController.email.text.trim(),
-                                registController.password.text.trim());
-                          }
+                          siginUp();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(111, 78, 49, 1.0),
@@ -388,6 +405,7 @@ class _RegistState extends State<Regist> {
                     )
                   ],
                 ),
+
                 Padding(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom))
