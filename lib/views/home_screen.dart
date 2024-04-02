@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Container(
                   //margin: EdgeInsets.only(left: 30, right: 10),
-                  height: 300,
+                  height: 270,
                   child: Image(
                       image: AssetImage('lib/icons/coffeetime.gif'),
                       fit: BoxFit.cover),
